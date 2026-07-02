@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ねむりみっけ 〜いい眠り、みっけ！〜</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: "Hiragino Kaku Gothic ProN", "Yu Gothic", Meiryo, sans-serif;
+    background: linear-gradient(180deg, #1a2a5e 0%, #225AD3 100%);
+    min-height: 100vh;
+    color: #333;
+  }
+  .app {
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 16px 16px 90px 16px;
+  }
+  .header {
+    text-align: center;
+    color: #fff;
+    padding: 14px 0 10px 0;
+  }
+  .header h1 { font-size: 22px; letter-spacing: 2px; }
+  .header p { font-size: 12px; opacity: 0.85; margin-top: 4px; }
+  .card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 18px;
+    margin-bottom: 14px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  }
+  .card h2 {
+    font-size: 16px;
+    color: #225AD3;
+    margin-bottom: 12px;
+    border-left: 4px solid #0179E8;
+    padding-left: 8px;
+  }
+  .label { font-size: 13px; color: #666; margin: 10px 0 6px 0; }
+  .choice-row { display: flex; gap: 8px; flex-wrap: wrap; }
+  .choice-btn {
+    flex: 1;
+    min-width: 90px;
+    padding: 12px 6px;
+    border: 2px solid #d5e2f7;
+    border-radius: 12px;
+    background: #f6f9ff;
+    font-size: 14px;
+    cursor: pointer;
+    text-align: center;
+    transition: 0.15s;
+  }
+  .choice-btn.active {
+    border-color: #0179E8;
+    background: #0179E8;
+    color: #fff;
+    font-weight: bold;
+  }
+  .big-emoji { font-size: 26px; display: block; margin-bottom: 4px; }
+  input[type="time"], input[type="text"], input[type="password"] {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    border: 2px solid #d5e2f7;
+    border-radius: 10px;
+    background: #f6f9ff;
+  }
+  textarea {
+    width: 100%;
+    padding: 12px;
+    font-size: 14px;
+    border: 2px solid #d5e2f7;
+    border-radius: 10px;
+    background: #f6f9ff;
+    resize: none;
+    height: 70px;
+  }
+  .main-btn {
+    width: 100%;
+    padding: 16px;
+    font-size: 17px;
+    font-weight: bold;
+    color: #fff;
+    background: linear-gradient(90deg, #225AD3, #0179E8);
+    border: none;
+    border-radius: 14px;
+    cursor: pointer;
+    margin-top: 14px;
+  }
+  .main-btn:active { opacity: 0.8; }
+  .sub-btn {
+    width: 100%;
+    padding: 12px;
+    font-size: 14px;
+    color: #225AD3;
+    background: #eef4ff;
+    border: 2px solid #c9dcff;
+    border-radius: 12px;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+  .tabbar {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    max-width: 480px;
+    margin: 0 auto;
+    display: flex;
+    background: #fff;
+    border-top: 1px solid #e0e8f5;
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+  }
+  .tab {
+    flex: 1;
+    text-align: center;
+    padding: 10px 0 12px 0;
+    font-size: 11px;
+    color: #999;
+    cursor: pointer;
+  }
+  .tab .t-icon { font-size: 20px; display: block; }
+  .tab.active { color: #0179E8; font-weight: bold; }
+  .screen { display: none; }
+  .screen.active { display: block; }
+  canvas { width: 100%; }
+  .best-box {
+    background: linear-gradient(90deg, #fff8e1, #fff3cd);
+    border: 2px solid #ffd54f;
+    border-radius: 12px;
+    padding: 14px;
+    text-align: center;
+    font-size: 14px;
+    margin-top: 12px;
+  }
+  .advice-box {
+    background: #f0f7ff;
+    border-radius: 12px;
+    padding: 14px;
+    font-size: 14px;
+    line-height: 1.8;
+    margin-top: 8px;
+  }
+  .lock-box {
+    background: #f7f7f7;
+    border: 2px dashed #ccc;
+    border-radius: 12px;
+    padding: 16px;
+    text-align: center;
+    font-size: 13px;
+    color: #777;
+    margin-top: 12px;
+    line-height: 1.7;
+  }
+  .toast {
+    position: fixed;
+    top: 20px; left: 50%;
+    transform: translateX(-50%);
+    background: #333;
+    color: #fff;
+    padding: 12px 22px;
+    border-radius: 30px;
+    font-size: 14px;
+    opacity: 0;
+    transition: 0.3s;
+    pointer-events: none;
+    z-index: 99;
+  }
+  .toast.show { opacity: 1; }
+  .history-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 4px;
+    border-bottom: 1px solid #eef2f8;
+    font-size: 13px;
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="header">
+    <h1>🌙 ねむりみっけ</h1>
+    <p>眠りの中に、あなたの元気のヒントがある</p>
+  </div>
+  <!-- ===== 画面1 オンボーディング ===== -->
+  <div class="screen" id="screen-onboard">
+    <div class="card">
+      <h2>はじめまして😊</h2>
+      <p style="font-size:13px; line-height:1.8;">あなたに合ったアドバイスをお届けするため、3つだけ教えてください。</p>
+  <div class="label">性別</div>
+  <div class="choice-row" data-group="gender">
+    <div class="choice-btn" data-val="男性">男性</div>
+    <div class="choice-btn" data-val="女性">女性</div>
+    <div class="choice-btn" data-val="その他">その他</div>
+  </div>
+
+  <div class="label">年代</div>
+  <div class="choice-row" data-group="age">
+    <div class="choice-btn" data-val="40代以下">40代以下</div>
+    <div class="choice-btn" data-val="50代">50代</div>
+    <div class="choice-btn" data-val="60代">60代</div>
+    <div class="choice-btn" data-val="70代以上">70代以上</div>
+  </div>
+
+  <div class="label">あなたのタイプ</div>
+  <div class="choice-row" data-group="chrono">
+    <div class="choice-btn" data-val="朝型"><span class="big-emoji">🌅</span>朝型</div>
+    <div class="choice-btn" data-val="夜型"><span class="big-emoji">🌃</span>夜型</div>
+  </div>
+
+  <div class="label">いちばんの悩み</div>
+  <div class="choice-row" data-group="worry">
+    <div class="choice-btn" data-val="寝つき">寝つきが悪い</div>
+    <div class="choice-btn" data-val="中途覚醒">夜中に目が覚める</div>
+    <div class="choice-btn" data-val="朝">朝スッキリしない</div>
+  </div>
+
+  <button class="main-btn" onclick="saveProfile()">はじめる 🌙</button>
+</div>
+  </div>
+  <!-- ===== 画面2 今日の記録 ===== -->
+  <div class="screen" id="screen-record">
+    <div class="card">
+      <h2>今日の眠りを記録📝</h2>
+  <div class="label">寝た時間</div>
+  <input type="time" id="sleepTime" value="23:00">
+
+  <div class="label">起きた時間</div>
+  <input type="time" id="wakeTime" value="06:00">
+
+  <div class="label">寝つきはどうでしたか？</div>
+  <div class="choice-row" data-group="fallAsleep">
+    <div class="choice-btn" data-val="すぐ寝れた">すぐ寝れた</div>
+    <div class="choice-btn" data-val="まあまあ">まあまあ</div>
+    <div class="choice-btn" data-val="なかなか">なかなか</div>
+  </div>
+
+  <div class="label">目覚めの気分は？</div>
+  <div class="choice-row" data-group="mood">
+    <div class="choice-btn" data-val="スッキリ"><span class="big-emoji">😊</span>スッキリ</div>
+    <div class="choice-btn" data-val="ふつう"><span class="big-emoji">😐</span>ふつう</div>
+    <div class="choice-btn" data-val="どんより"><span class="big-emoji">😪</span>どんより</div>
+  </div>
+
+  <div class="label">メモ（お酒・昼寝・運動など、あれば）</div>
+  <textarea id="memo" placeholder="例：夕食後にお酒を少し。夕方30分散歩。"></textarea>
+
+  <button class="main-btn" onclick="saveRecord()">記録する ✨</button>
+</div>
+
+<div class="card">
+  <h2>さいきんの記録</h2>
+  <div id="historyList"></div>
+</div>
+  </div>
+  <!-- ===== 画面3 ねむりグラフ ===== -->
+  <div class="screen" id="screen-graph">
+    <div class="card">
+      <h2>今週のねむりグラフ📊</h2>
+      <canvas id="graphCanvas" width="440" height="300"></canvas>
+      <div style="font-size:11px; color:#888; margin-top:6px;">
+        棒の色 ＝ 目覚めの気分（青：スッキリ／水色：ふつう／グレー：どんより）
+      </div>
+      <div class="best-box" id="bestBox">まだ記録がありません。まずは今日の眠りを記録してみましょう😊</div>
+    </div>
+  </div>
+  <!-- ===== 画面4 アドバイス ===== -->
+  <div class="screen" id="screen-advice">
+    <div class="card">
+      <h2>今日のかんたんアドバイス💡</h2>
+      <div class="advice-box" id="adviceBox">記録がたまると、ここにアドバイスが表示されます。</div>
+      <div class="lock-box">
+        🤖 AIによる「あなたの眠りタイプ診断」はPro版で利用できます。<br>
+        あなたの1週間の記録をAIがまるごと読んで、あなただけのアドバイスをお届けします。<br>
+        （Pro版は現在準備中です）
+      </div>
+    </div>
+  </div>
+  <!-- ===== 画面5 設定 ===== -->
+  <div class="screen" id="screen-setting">
+    <div class="card">
+      <h2>設定⚙️</h2>
+      <div class="label">Pro版パスワード（お持ちの方）</div>
+      <input type="password" id="proPass" placeholder="パスワードを入力">
+      <button class="sub-btn" onclick="checkPass()">Pro版を解除する</button>
+  <div class="label" style="margin-top:20px;">データ管理</div>
+  <button class="sub-btn" onclick="resetProfile()">プロフィールを設定しなおす</button>
+  <button class="sub-btn" onclick="deleteAll()" style="color:#c0392b; border-color:#f2c9c4; background:#fdf1ef;">すべてのデータを削除する</button>
+
+  <p style="font-size:11px; color:#999; margin-top:16px; line-height:1.7;">
+    記録はこの端末の中だけに保存されます。サーバーには送信されません。<br>
+    ねむりみっけ ver 1.0 ／ みっけシリーズ
+  </p>
+</div>
+  </div>
+</div>
+<!-- タブバー -->
+<div class="tabbar">
+  <div class="tab" data-screen="screen-record"><span class="t-icon">📝</span>記録</div>
+  <div class="tab" data-screen="screen-graph"><span class="t-icon">📊</span>グラフ</div>
+  <div class="tab" data-screen="screen-advice"><span class="t-icon">💡</span>アドバイス</div>
+  <div class="tab" data-screen="screen-setting"><span class="t-icon">⚙️</span>設定</div>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+// ========== データ管理 ==========
+const KEY_PROFILE = "nemuri_profile";
+const KEY_RECORDS = "nemuri_records";
+const KEY_PRO = "nemuri_pro";
+
+function getProfile() {
+  try { return JSON.parse(localStorage.getItem(KEY_PROFILE)); } catch(e) { return null; }
+}
+function getRecords() {
+  try { return JSON.parse(localStorage.getItem(KEY_RECORDS)) || []; } catch(e) { return []; }
+}
+function setRecords(r) { localStorage.setItem(KEY_RECORDS, JSON.stringify(r)); }
+
+// ========== 選択ボタン共通 ==========
+document.querySelectorAll(".choice-row").forEach(row => {
+  row.addEventListener("click", e => {
+    const btn = e.target.closest(".choice-btn");
+    if (!btn) return;
+    row.querySelectorAll(".choice-btn").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+  });
+});
+function getChoice(group) {
+  const row = document.querySelector('[data-group="' + group + '"]');
+  const active = row.querySelector(".choice-btn.active");
+  return active ? active.dataset.val : null;
+}
+
+// ========== 画面切り替え ==========
+function showScreen(id) {
+  document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+  document.querySelectorAll(".tab").forEach(t => {
+    t.classList.toggle("active", t.dataset.screen === id);
+  });
+  if (id === "screen-graph") drawGraph();
+  if (id === "screen-advice") makeAdvice();
+  if (id === "screen-record") renderHistory();
+}
+document.querySelectorAll(".tab").forEach(t => {
+  t.addEventListener("click", () => {
+    if (!getProfile()) { toast("まず最初の質問に答えてくださいね😊"); return; }
+    showScreen(t.dataset.screen);
+  });
+});
+
+// ========== オンボーディング ==========
+function saveProfile() {
+  const p = {
+    gender: getChoice("gender"),
+    age: getChoice("age"),
+    chrono: getChoice("chrono"),
+    worry: getChoice("worry")
+  };
+  if (!p.gender || !p.age || !p.chrono || !p.worry) {
+    toast("すべての項目を選んでくださいね");
+    return;
+  }
+  localStorage.setItem(KEY_PROFILE, JSON.stringify(p));
+  toast("ようこそ、ねむりみっけへ🌙");
+  showScreen("screen-record");
+}
+
+// ========== 記録 ==========
+function calcHours(sleep, wake) {
+  let [sh, sm] = sleep.split(":").map(Number);
+  let [wh, wm] = wake.split(":").map(Number);
+  let s = sh * 60 + sm;
+  let w = wh * 60 + wm;
+  if (w <= s) w += 24 * 60;
+  return Math.round((w - s) / 6) / 10;
+}
+function todayStr() {
+  const d = new Date();
+  return d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0") + "-" + String(d.getDate()).padStart(2,"0");
+}
+function saveRecord() {
+  const sleep = document.getElementById("sleepTime").value;
+  const wake = document.getElementById("wakeTime").value;
+  const fall = getChoice("fallAsleep");
+  const mood = getChoice("mood");
+  if (!sleep || !wake || !fall || !mood) {
+    toast("時間・寝つき・気分を選んでくださいね");
+    return;
+  }
+  const rec = {
+    date: todayStr(),
+    sleep: sleep,
+    wake: wake,
+    hours: calcHours(sleep, wake),
+    fall: fall,
+    mood: mood,
+    memo: document.getElementById("memo").value.trim()
+  };
+  let records = getRecords().filter(r => r.date !== rec.date);
+  records.push(rec);
+  records.sort((a,b) => a.date < b.date ? -1 : 1);
+  if (records.length > 60) records = records.slice(-60);
+  setRecords(records);
+  document.getElementById("memo").value = "";
+  toast("記録しました！いい眠り、みっけ✨");
+  renderHistory();
+}
+function renderHistory() {
+  const list = document.getElementById("historyList");
+  const records = getRecords().slice(-7).reverse();
+  if (records.length === 0) {
+    list.innerHTML = '<p style="font-size:13px; color:#999;">まだ記録がありません</p>';
+    return;
+  }
+  const moodEmoji = { "スッキリ":"😊", "ふつう":"😐", "どんより":"😪" };
+  list.innerHTML = records.map(r =>
+    '<div class="history-item"><span>' + r.date.slice(5).replace("-","/") + "　" + r.hours + "時間</span><span>" + moodEmoji[r.mood] + " " + r.mood + "</span></div>"
+  ).join("");
+}
+
+// ========== グラフ（Canvas手書き） ==========
+function drawGraph() {
+  const canvas = document.getElementById("graphCanvas");
+  const ctx = canvas.getContext("2d");
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  const records = getRecords().slice(-7);
+  const W = canvas.width, H = canvas.height;
+  const padL = 40, padB = 40, padT = 20;
+  const graphH = H - padB - padT;
+  const maxH = 10; // 最大10時間表示
+
+  // 横罫線と目盛り
+  ctx.strokeStyle = "#e5ecf6";
+  ctx.fillStyle = "#999";
+  ctx.font = "11px sans-serif";
+  ctx.textAlign = "right";
+  for (let h = 0; h <= maxH; h += 2) {
+    const y = padT + graphH - (h / maxH) * graphH;
+    ctx.beginPath();
+    ctx.moveTo(padL, y);
+    ctx.lineTo(W - 10, y);
+    ctx.stroke();
+    ctx.fillText(h + "h", padL - 6, y + 4);
+  }
+
+  if (records.length === 0) return;
+
+  const moodColor = { "スッキリ": "#225AD3", "ふつう": "#7db8ef", "どんより": "#b8bfc9" };
+  const slotW = (W - padL - 10) / 7;
+
+  records.forEach((r, i) => {
+    const barH = Math.min(r.hours, maxH) / maxH * graphH;
+    const x = padL + i * slotW + slotW * 0.2;
+    const y = padT + graphH - barH;
+    const bw = slotW * 0.6;
+
+    // 棒（角丸風）
+    ctx.fillStyle = moodColor[r.mood] || "#7db8ef";
+    ctx.beginPath();
+    ctx.moveTo(x, y + 6);
+    ctx.arcTo(x, y, x + bw, y, 6);
+    ctx.arcTo(x + bw, y, x + bw, y + 6, 6);
+    ctx.lineTo(x + bw, padT + graphH);
+    ctx.lineTo(x, padT + graphH);
+    ctx.closePath();
+    ctx.fill();
+
+    // 時間ラベル
+    ctx.fillStyle = "#225AD3";
+    ctx.font = "bold 11px sans-serif";
+    ctx.textAlign = "center";
+    ctx.fillText(r.hours + "h", x + bw/2, y - 6);
+
+    // 日付ラベル
+    ctx.fillStyle = "#888";
+    ctx.font = "10px sans-serif";
+    ctx.fillText(r.date.slice(5).replace("-","/"), x + bw/2, H - 12);
+  });
+
+  // ベスト睡眠日
+  const best = records.filter(r => r.mood === "スッキリ").sort((a,b) => b.hours - a.hours)[0];
+  const box = document.getElementById("bestBox");
+  if (best) {
+    box.innerHTML = "🏆 今週のベスト睡眠日は <b>" + best.date.slice(5).replace("-","/") + "</b>！<br>" +
+      best.sleep + "に寝て" + best.wake + "起き（" + best.hours + "時間）でスッキリ😊<br>この日のリズム、みっけ✨";
+  } else {
+    box.innerHTML = "「スッキリ」の日がまだありません。焦らず、まずは記録を続けましょう🌙";
+  }
+}
+
+// ========== かんたんアドバイス（ルールベース・無料版） ==========
+function makeAdvice() {
+  const box = document.getElementById("adviceBox");
+  const records = getRecords();
+  const p = getProfile() || {};
+  if (records.length === 0) {
+    box.innerHTML = "記録がたまると、ここにアドバイスが表示されます😊";
+    return;
+  }
+  const recent = records.slice(-7);
+  const avg = Math.round(recent.reduce((s,r) => s + r.hours, 0) / recent.length * 10) / 10;
+  const goodDays = recent.filter(r => r.mood === "スッキリ").length;
+
+  let msg = "この1週間の平均睡眠時間は <b>" + avg + "時間</b>、スッキリ起きられた日は <b>" + goodDays + "日</b>でした。<br><br>";
+
+  if (avg < 6) {
+    msg += "少し睡眠時間が短めのようです。いつもより15分だけ早くお布団に入ることから始めてみませんか？😊<br><br>";
+  } else if (avg > 9) {
+    msg += "たっぷり眠れていますね。もし日中に眠気が残るようなら、朝の光を浴びる時間を作るとリズムが整いますよ🌅<br><br>";
+  } else {
+    msg += "睡眠時間はいいペースです。この調子で続けましょう✨<br><br>";
+  }
+
+  const worryMsg = {
+    "寝つき": "寝つきが気になる方は、寝る1時間前にスマホを置いて、部屋の明かりを少し落とすのがおすすめです。",
+    "中途覚醒": "夜中に目が覚めやすい方は、夕方以降のカフェインとお酒を控えめにすると変化が出やすいですよ。",
+    "朝": "朝スッキリしない方は、起きたらまずカーテンを開けて朝日を浴びる習慣が効果的です。"
+  };
+  if (p.worry && worryMsg[p.worry]) msg += "💡 " + worryMsg[p.worry];
+
+  box.innerHTML = msg;
+}
+
+// ========== Pro解除（準備中） ==========
+function checkPass() {
+  toast("Pro版は現在準備中です。もうしばらくお待ちください😊");
+}
+
+// ========== 設定 ==========
+function resetProfile() {
+  localStorage.removeItem(KEY_PROFILE);
+  location.reload();
+}
+function deleteAll() {
+  if (confirm("すべての記録を削除します。よろしいですか？")) {
+    localStorage.removeItem(KEY_RECORDS);
+    localStorage.removeItem(KEY_PROFILE);
+    location.reload();
+  }
+}
+
+// ========== トースト ==========
+let toastTimer;
+function toast(msg) {
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove("show"), 2200);
+}
+
+// ========== 起動 ==========
+if (getProfile()) {
+  showScreen("screen-record");
+  renderHistory();
+} else {
+  showScreen("screen-onboard");
+}
+</script>
+</body>
+</html>
