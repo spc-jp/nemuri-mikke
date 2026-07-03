@@ -7,10 +7,11 @@
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
-    font-family: "Hiragino Kaku Gothic ProN", "Yu Gothic", Meiryo, sans-serif;
+    font-family: "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, "Yu Gothic Medium", "Yu Gothic", sans-serif;
     background: #F4F4FA;
     min-height: 100vh;
     color: #333;
+    font-weight: 500;
   }
   .app {
     max-width: 480px;
@@ -33,7 +34,7 @@
   }
   .header .sub {
     font-size: 11px;
-    color: #999;
+    color: #888;
   }
   .card {
     background: #fff;
@@ -49,7 +50,6 @@
     border-left: 4px solid #5B5BD6;
     padding-left: 8px;
   }
-  /* 今日のやること */
   .todo-card { padding: 14px 18px; }
   .todo-head {
     display: flex;
@@ -64,6 +64,7 @@
     background: #eeeefc;
     border-radius: 12px;
     padding: 2px 10px;
+    font-weight: bold;
   }
   .todo-item {
     display: flex;
@@ -71,7 +72,8 @@
     gap: 10px;
     padding: 8px 0;
     font-size: 14px;
-    color: #555;
+    color: #444;
+    font-weight: bold;
     cursor: pointer;
   }
   .todo-circle {
@@ -87,7 +89,6 @@
   }
   .todo-item.done .todo-circle { background: #5B5BD6; border-color: #5B5BD6; }
   .todo-item.done span.txt { color: #aaa; text-decoration: line-through; }
-  /* プランカード */
   .plan-card {
     background: linear-gradient(135deg, #5B5BD6 0%, #7B6CE0 100%);
     color: #fff;
@@ -103,17 +104,17 @@
     border-radius: 12px;
     padding: 3px 10px;
     margin-bottom: 8px;
+    font-weight: bold;
   }
   .plan-title { font-size: 16px; font-weight: bold; margin-bottom: 6px; line-height: 1.5; }
-  .plan-desc { font-size: 12px; opacity: 0.9; line-height: 1.6; }
+  .plan-desc { font-size: 12px; opacity: 0.95; line-height: 1.6; }
   .plan-change {
     font-size: 11px;
     text-decoration: underline;
     float: right;
     cursor: pointer;
-    opacity: 0.85;
+    opacity: 0.9;
   }
-  /* 今日の一言 */
   .hitokoto {
     background: #FDF6E3;
     border-radius: 14px;
@@ -121,16 +122,16 @@
     margin-bottom: 14px;
     font-size: 13px;
     line-height: 1.7;
-    color: #6b5d3f;
+    color: #5d5033;
   }
   .hitokoto .h-label {
     font-size: 12px;
-    color: #C9962E;
+    color: #B8860B;
     font-weight: bold;
     display: block;
     margin-bottom: 2px;
   }
-  .label { font-size: 13px; color: #666; margin: 10px 0 6px 0; }
+  .label { font-size: 14px; color: #555; margin: 10px 0 6px 0; font-weight: bold; }
   .choice-row { display: flex; gap: 8px; flex-wrap: wrap; }
   .choice-btn {
     flex: 1;
@@ -140,6 +141,8 @@
     border-radius: 12px;
     background: #f8f8fd;
     font-size: 14px;
+    font-weight: bold;
+    color: #444;
     cursor: pointer;
     text-align: center;
     transition: 0.15s;
@@ -155,19 +158,25 @@
     width: 100%;
     padding: 12px;
     font-size: 16px;
+    font-weight: 500;
+    color: #333;
     border: 2px solid #e2e2f5;
     border-radius: 10px;
     background: #f8f8fd;
+    font-family: inherit;
   }
   textarea {
     width: 100%;
     padding: 12px;
     font-size: 14px;
+    font-weight: 500;
+    color: #333;
     border: 2px solid #e2e2f5;
     border-radius: 10px;
     background: #f8f8fd;
     resize: none;
     height: 70px;
+    font-family: inherit;
   }
   .main-btn {
     width: 100%;
@@ -180,18 +189,21 @@
     border-radius: 14px;
     cursor: pointer;
     margin-top: 14px;
+    font-family: inherit;
   }
   .main-btn:active { opacity: 0.8; }
   .sub-btn {
     width: 100%;
     padding: 12px;
     font-size: 14px;
+    font-weight: bold;
     color: #5B5BD6;
     background: #f0f0fc;
     border: 2px solid #d9d9f2;
     border-radius: 12px;
     cursor: pointer;
     margin-top: 10px;
+    font-family: inherit;
   }
   .tabbar {
     position: fixed;
@@ -208,11 +220,12 @@
     text-align: center;
     padding: 10px 0 12px 0;
     font-size: 11px;
+    font-weight: bold;
     color: #999;
     cursor: pointer;
   }
   .tab .t-icon { font-size: 20px; display: block; }
-  .tab.active { color: #5B5BD6; font-weight: bold; }
+  .tab.active { color: #5B5BD6; }
   .screen { display: none; }
   .screen.active { display: block; }
   canvas { width: 100%; }
@@ -225,6 +238,7 @@
     font-size: 14px;
     margin-top: 12px;
     line-height: 1.8;
+    color: #5d5033;
   }
   .advice-box {
     background: #f4f4fd;
@@ -233,6 +247,7 @@
     font-size: 14px;
     line-height: 1.8;
     margin-top: 8px;
+    color: #333;
   }
   .lock-box {
     background: #f7f7f7;
@@ -241,7 +256,7 @@
     padding: 16px;
     text-align: center;
     font-size: 13px;
-    color: #777;
+    color: #666;
     margin-top: 12px;
     line-height: 1.7;
   }
@@ -254,6 +269,7 @@
     padding: 12px 22px;
     border-radius: 30px;
     font-size: 14px;
+    font-weight: bold;
     opacity: 0;
     transition: 0.3s;
     pointer-events: none;
@@ -266,6 +282,7 @@
     padding: 10px 4px;
     border-bottom: 1px solid #f0f0f8;
     font-size: 13px;
+    color: #444;
   }
 </style>
 </head>
@@ -279,7 +296,7 @@
   <div class="screen" id="screen-onboard">
     <div class="card">
       <h2>はじめまして😊</h2>
-      <p style="font-size:13px; line-height:1.8;">あなたに合ったアドバイスをお届けするため、4つだけ教えてください。</p>
+      <p style="font-size:14px; line-height:1.8; color:#444;">あなたに合ったアドバイスをお届けするため、4つだけ教えてください。</p>
   <div class="label">性別</div>
   <div class="choice-row" data-group="gender">
     <div class="choice-btn" data-val="男性">男性</div>
@@ -375,7 +392,7 @@
     <div class="card">
       <h2>今週のねむりグラフ📊</h2>
       <canvas id="graphCanvas" width="440" height="300"></canvas>
-      <div style="font-size:11px; color:#888; margin-top:6px;">
+      <div style="font-size:12px; color:#666; margin-top:6px; font-weight:bold;">
         棒の色 ＝ 目覚めの気分（紫：スッキリ／うす紫：ふつう／グレー：どんより）
       </div>
       <div class="best-box" id="bestBox">まだ記録がありません。まずは今日の眠りを記録してみましょう😊</div>
@@ -404,9 +421,9 @@
   <button class="sub-btn" onclick="resetProfile()">プロフィールを設定しなおす</button>
   <button class="sub-btn" onclick="deleteAll()" style="color:#c0392b; border-color:#f2c9c4; background:#fdf1ef;">すべてのデータを削除する</button>
 
-  <p style="font-size:11px; color:#999; margin-top:16px; line-height:1.7;">
+  <p style="font-size:12px; color:#888; margin-top:16px; line-height:1.7;">
     記録はこの端末の中だけに保存されます。サーバーには送信されません。<br>
-    ねむりみっけ ver 1.1 ／ みっけシリーズ
+    ねむりみっけ ver 1.2 ／ みっけシリーズ
   </p>
 </div>
   </div>
@@ -596,7 +613,7 @@ function renderHistory() {
   const list = document.getElementById("historyList");
   const records = getRecords().slice(-7).reverse();
   if (records.length === 0) {
-    list.innerHTML = '<p style="font-size:13px; color:#999;">まだ記録がありません</p>';
+    list.innerHTML = '<p style="font-size:13px; color:#888;">まだ記録がありません</p>';
     return;
   }
   const moodEmoji = { "スッキリ":"😊", "ふつう":"😐", "どんより":"😪" };
@@ -618,8 +635,8 @@ function drawGraph() {
   const maxH = 10;
 
   ctx.strokeStyle = "#eaeaf5";
-  ctx.fillStyle = "#999";
-  ctx.font = "11px sans-serif";
+  ctx.fillStyle = "#777";
+  ctx.font = "bold 11px sans-serif";
   ctx.textAlign = "right";
   for (let h = 0; h <= maxH; h += 2) {
     const y = padT + graphH - (h / maxH) * graphH;
@@ -652,12 +669,12 @@ function drawGraph() {
     ctx.fill();
 
     ctx.fillStyle = "#5B5BD6";
-    ctx.font = "bold 11px sans-serif";
+    ctx.font = "bold 12px sans-serif";
     ctx.textAlign = "center";
     ctx.fillText(r.hours + "h", x + bw/2, y - 6);
 
-    ctx.fillStyle = "#888";
-    ctx.font = "10px sans-serif";
+    ctx.fillStyle = "#777";
+    ctx.font = "bold 10px sans-serif";
     ctx.fillText(r.date.slice(5).replace("-","/"), x + bw/2, H - 12);
   });
 
