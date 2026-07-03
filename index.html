@@ -8,35 +8,127 @@
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
     font-family: "Hiragino Kaku Gothic ProN", "Yu Gothic", Meiryo, sans-serif;
-    background: linear-gradient(180deg, #1a2a5e 0%, #225AD3 100%);
+    background: #F4F4FA;
     min-height: 100vh;
     color: #333;
   }
   .app {
     max-width: 480px;
     margin: 0 auto;
-    padding: 16px 16px 90px 16px;
+    padding: 0 14px 90px 14px;
   }
   .header {
-    text-align: center;
-    color: #fff;
-    padding: 14px 0 10px 0;
+    background: #fff;
+    margin: 0 -14px 14px -14px;
+    padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #ecebf5;
   }
-  .header h1 { font-size: 22px; letter-spacing: 2px; }
-  .header p { font-size: 12px; opacity: 0.85; margin-top: 4px; }
+  .header h1 {
+    font-size: 18px;
+    color: #444;
+    letter-spacing: 1px;
+  }
+  .header .sub {
+    font-size: 11px;
+    color: #999;
+  }
   .card {
     background: #fff;
     border-radius: 16px;
     padding: 18px;
     margin-bottom: 14px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    box-shadow: 0 2px 8px rgba(91,91,214,0.08);
   }
   .card h2 {
-    font-size: 16px;
-    color: #225AD3;
+    font-size: 15px;
+    color: #5B5BD6;
     margin-bottom: 12px;
-    border-left: 4px solid #0179E8;
+    border-left: 4px solid #5B5BD6;
     padding-left: 8px;
+  }
+  /* 今日のやること */
+  .todo-card { padding: 14px 18px; }
+  .todo-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+  .todo-head .title { font-size: 14px; font-weight: bold; color: #444; }
+  .todo-head .count {
+    font-size: 12px;
+    color: #5B5BD6;
+    background: #eeeefc;
+    border-radius: 12px;
+    padding: 2px 10px;
+  }
+  .todo-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 0;
+    font-size: 14px;
+    color: #555;
+    cursor: pointer;
+  }
+  .todo-circle {
+    width: 22px; height: 22px;
+    border: 2px solid #ccc;
+    border-radius: 50%;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    color: #fff;
+  }
+  .todo-item.done .todo-circle { background: #5B5BD6; border-color: #5B5BD6; }
+  .todo-item.done span.txt { color: #aaa; text-decoration: line-through; }
+  /* プランカード */
+  .plan-card {
+    background: linear-gradient(135deg, #5B5BD6 0%, #7B6CE0 100%);
+    color: #fff;
+    border-radius: 16px;
+    padding: 18px;
+    margin-bottom: 14px;
+    box-shadow: 0 4px 12px rgba(91,91,214,0.25);
+  }
+  .plan-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.25);
+    font-size: 11px;
+    border-radius: 12px;
+    padding: 3px 10px;
+    margin-bottom: 8px;
+  }
+  .plan-title { font-size: 16px; font-weight: bold; margin-bottom: 6px; line-height: 1.5; }
+  .plan-desc { font-size: 12px; opacity: 0.9; line-height: 1.6; }
+  .plan-change {
+    font-size: 11px;
+    text-decoration: underline;
+    float: right;
+    cursor: pointer;
+    opacity: 0.85;
+  }
+  /* 今日の一言 */
+  .hitokoto {
+    background: #FDF6E3;
+    border-radius: 14px;
+    padding: 12px 16px;
+    margin-bottom: 14px;
+    font-size: 13px;
+    line-height: 1.7;
+    color: #6b5d3f;
+  }
+  .hitokoto .h-label {
+    font-size: 12px;
+    color: #C9962E;
+    font-weight: bold;
+    display: block;
+    margin-bottom: 2px;
   }
   .label { font-size: 13px; color: #666; margin: 10px 0 6px 0; }
   .choice-row { display: flex; gap: 8px; flex-wrap: wrap; }
@@ -44,17 +136,17 @@
     flex: 1;
     min-width: 90px;
     padding: 12px 6px;
-    border: 2px solid #d5e2f7;
+    border: 2px solid #e2e2f5;
     border-radius: 12px;
-    background: #f6f9ff;
+    background: #f8f8fd;
     font-size: 14px;
     cursor: pointer;
     text-align: center;
     transition: 0.15s;
   }
   .choice-btn.active {
-    border-color: #0179E8;
-    background: #0179E8;
+    border-color: #5B5BD6;
+    background: #5B5BD6;
     color: #fff;
     font-weight: bold;
   }
@@ -63,17 +155,17 @@
     width: 100%;
     padding: 12px;
     font-size: 16px;
-    border: 2px solid #d5e2f7;
+    border: 2px solid #e2e2f5;
     border-radius: 10px;
-    background: #f6f9ff;
+    background: #f8f8fd;
   }
   textarea {
     width: 100%;
     padding: 12px;
     font-size: 14px;
-    border: 2px solid #d5e2f7;
+    border: 2px solid #e2e2f5;
     border-radius: 10px;
-    background: #f6f9ff;
+    background: #f8f8fd;
     resize: none;
     height: 70px;
   }
@@ -83,7 +175,7 @@
     font-size: 17px;
     font-weight: bold;
     color: #fff;
-    background: linear-gradient(90deg, #225AD3, #0179E8);
+    background: linear-gradient(90deg, #5B5BD6, #7B6CE0);
     border: none;
     border-radius: 14px;
     cursor: pointer;
@@ -94,9 +186,9 @@
     width: 100%;
     padding: 12px;
     font-size: 14px;
-    color: #225AD3;
-    background: #eef4ff;
-    border: 2px solid #c9dcff;
+    color: #5B5BD6;
+    background: #f0f0fc;
+    border: 2px solid #d9d9f2;
     border-radius: 12px;
     cursor: pointer;
     margin-top: 10px;
@@ -108,8 +200,8 @@
     margin: 0 auto;
     display: flex;
     background: #fff;
-    border-top: 1px solid #e0e8f5;
-    box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+    border-top: 1px solid #ecebf5;
+    box-shadow: 0 -2px 10px rgba(91,91,214,0.08);
   }
   .tab {
     flex: 1;
@@ -120,21 +212,22 @@
     cursor: pointer;
   }
   .tab .t-icon { font-size: 20px; display: block; }
-  .tab.active { color: #0179E8; font-weight: bold; }
+  .tab.active { color: #5B5BD6; font-weight: bold; }
   .screen { display: none; }
   .screen.active { display: block; }
   canvas { width: 100%; }
   .best-box {
-    background: linear-gradient(90deg, #fff8e1, #fff3cd);
-    border: 2px solid #ffd54f;
+    background: #FDF6E3;
+    border: 2px solid #F0DA9E;
     border-radius: 12px;
     padding: 14px;
     text-align: center;
     font-size: 14px;
     margin-top: 12px;
+    line-height: 1.8;
   }
   .advice-box {
-    background: #f0f7ff;
+    background: #f4f4fd;
     border-radius: 12px;
     padding: 14px;
     font-size: 14px;
@@ -156,7 +249,7 @@
     position: fixed;
     top: 20px; left: 50%;
     transform: translateX(-50%);
-    background: #333;
+    background: #444;
     color: #fff;
     padding: 12px 22px;
     border-radius: 30px;
@@ -171,7 +264,7 @@
     display: flex;
     justify-content: space-between;
     padding: 10px 4px;
-    border-bottom: 1px solid #eef2f8;
+    border-bottom: 1px solid #f0f0f8;
     font-size: 13px;
   }
 </style>
@@ -180,13 +273,13 @@
 <div class="app">
   <div class="header">
     <h1>🌙 ねむりみっけ</h1>
-    <p>眠りの中に、あなたの元気のヒントがある</p>
+    <span class="sub">いい眠り、みっけ！</span>
   </div>
   <!-- ===== 画面1 オンボーディング ===== -->
   <div class="screen" id="screen-onboard">
     <div class="card">
       <h2>はじめまして😊</h2>
-      <p style="font-size:13px; line-height:1.8;">あなたに合ったアドバイスをお届けするため、3つだけ教えてください。</p>
+      <p style="font-size:13px; line-height:1.8;">あなたに合ったアドバイスをお届けするため、4つだけ教えてください。</p>
   <div class="label">性別</div>
   <div class="choice-row" data-group="gender">
     <div class="choice-btn" data-val="男性">男性</div>
@@ -218,10 +311,34 @@
   <button class="main-btn" onclick="saveProfile()">はじめる 🌙</button>
 </div>
   </div>
-  <!-- ===== 画面2 今日の記録 ===== -->
+  <!-- ===== 画面2 今日の記録（ホーム） ===== -->
   <div class="screen" id="screen-record">
-    <div class="card">
-      <h2>今日の眠りを記録📝</h2>
+<div class="card todo-card">
+  <div class="todo-head">
+    <span class="title">✅ 今日のやること</span>
+    <span class="count" id="todoCount">0/1</span>
+  </div>
+  <div class="todo-item" id="todoRecord">
+    <div class="todo-circle" id="todoCircle"></div>
+    <span class="txt">🌙 今日の眠りを記録する</span>
+  </div>
+</div>
+
+<div class="plan-card">
+  <span class="plan-change" onclick="resetProfile()">変更する</span>
+  <span class="plan-badge" id="planBadge">プラン</span>
+  <div class="plan-title" id="planTitle">「あなたのプラン」</div>
+  <div class="plan-desc" id="planDesc"></div>
+</div>
+
+<div class="hitokoto">
+  <span class="h-label">💬 今日の一言</span>
+  <span id="hitokotoText"></span>
+</div>
+
+<div class="card">
+  <h2>今日の眠りを記録📝</h2>
+
   <div class="label">寝た時間</div>
   <input type="time" id="sleepTime" value="23:00">
 
@@ -259,7 +376,7 @@
       <h2>今週のねむりグラフ📊</h2>
       <canvas id="graphCanvas" width="440" height="300"></canvas>
       <div style="font-size:11px; color:#888; margin-top:6px;">
-        棒の色 ＝ 目覚めの気分（青：スッキリ／水色：ふつう／グレー：どんより）
+        棒の色 ＝ 目覚めの気分（紫：スッキリ／うす紫：ふつう／グレー：どんより）
       </div>
       <div class="best-box" id="bestBox">まだ記録がありません。まずは今日の眠りを記録してみましょう😊</div>
     </div>
@@ -289,14 +406,14 @@
 
   <p style="font-size:11px; color:#999; margin-top:16px; line-height:1.7;">
     記録はこの端末の中だけに保存されます。サーバーには送信されません。<br>
-    ねむりみっけ ver 1.0 ／ みっけシリーズ
+    ねむりみっけ ver 1.1 ／ みっけシリーズ
   </p>
 </div>
   </div>
 </div>
 <!-- タブバー -->
 <div class="tabbar">
-  <div class="tab" data-screen="screen-record"><span class="t-icon">📝</span>記録</div>
+  <div class="tab" data-screen="screen-record"><span class="t-icon">🏠</span>ホーム</div>
   <div class="tab" data-screen="screen-graph"><span class="t-icon">📊</span>グラフ</div>
   <div class="tab" data-screen="screen-advice"><span class="t-icon">💡</span>アドバイス</div>
   <div class="tab" data-screen="screen-setting"><span class="t-icon">⚙️</span>設定</div>
@@ -340,7 +457,7 @@ function showScreen(id) {
   });
   if (id === "screen-graph") drawGraph();
   if (id === "screen-advice") makeAdvice();
-  if (id === "screen-record") renderHistory();
+  if (id === "screen-record") renderHome();
 }
 document.querySelectorAll(".tab").forEach(t => {
   t.addEventListener("click", () => {
@@ -348,6 +465,75 @@ document.querySelectorAll(".tab").forEach(t => {
     showScreen(t.dataset.screen);
   });
 });
+
+// ========== プラン表示 ==========
+function planText(p) {
+  const key = p.worry;
+  const plans = {
+    "寝つき": {
+      title: "「おやすみ前の、心ほどきプラン」",
+      desc: "寝つきを良くすることを大切にした、ゆったり型のプランです。"
+    },
+    "中途覚醒": {
+      title: "「朝までぐっすり、安心プラン」",
+      desc: "夜中の目覚めを減らすことを大切にした、じっくり型のプランです。"
+    },
+    "朝": {
+      title: "「気持ちよく目覚める、朝サッパリプラン」",
+      desc: "スッキリした目覚めを大切にした、リズム重視のプランです。"
+    }
+  };
+  return plans[key] || plans["朝"];
+}
+function renderPlan() {
+  const p = getProfile();
+  if (!p) return;
+  document.getElementById("planBadge").textContent = p.age + " " + p.gender + "・" + p.chrono + "プラン";
+  const t = planText(p);
+  document.getElementById("planTitle").textContent = t.title;
+  document.getElementById("planDesc").textContent = t.desc;
+}
+
+// ========== 今日の一言（日替わり） ==========
+const hitokotoList = [
+  "今日の記録が、明日の元気につながります",
+  "眠りは、がんばったあなたへのごほうびです",
+  "うまく眠れない日があっても、大丈夫。記録すれば発見があります",
+  "昨日より15分早いお布団、それだけで立派な一歩です",
+  "いい眠りの日には、必ず理由があります。一緒にみつけましょう",
+  "焦らなくて大丈夫。眠りは少しずつ整っていきます",
+  "今夜のあなたが、ゆっくり休めますように"
+];
+function renderHitokoto() {
+  const d = new Date();
+  const idx = (d.getFullYear() + d.getMonth() + d.getDate()) % hitokotoList.length;
+  document.getElementById("hitokotoText").textContent = hitokotoList[idx];
+}
+
+// ========== 今日のやること ==========
+function renderTodo() {
+  const records = getRecords();
+  const done = records.some(r => r.date === todayStr());
+  const item = document.getElementById("todoRecord");
+  const circle = document.getElementById("todoCircle");
+  const count = document.getElementById("todoCount");
+  if (done) {
+    item.classList.add("done");
+    circle.textContent = "✓";
+    count.textContent = "1/1";
+  } else {
+    item.classList.remove("done");
+    circle.textContent = "";
+    count.textContent = "0/1";
+  }
+}
+
+function renderHome() {
+  renderPlan();
+  renderHitokoto();
+  renderTodo();
+  renderHistory();
+}
 
 // ========== オンボーディング ==========
 function saveProfile() {
@@ -404,7 +590,7 @@ function saveRecord() {
   setRecords(records);
   document.getElementById("memo").value = "";
   toast("記録しました！いい眠り、みっけ✨");
-  renderHistory();
+  renderHome();
 }
 function renderHistory() {
   const list = document.getElementById("historyList");
@@ -429,10 +615,9 @@ function drawGraph() {
   const W = canvas.width, H = canvas.height;
   const padL = 40, padB = 40, padT = 20;
   const graphH = H - padB - padT;
-  const maxH = 10; // 最大10時間表示
+  const maxH = 10;
 
-  // 横罫線と目盛り
-  ctx.strokeStyle = "#e5ecf6";
+  ctx.strokeStyle = "#eaeaf5";
   ctx.fillStyle = "#999";
   ctx.font = "11px sans-serif";
   ctx.textAlign = "right";
@@ -447,7 +632,7 @@ function drawGraph() {
 
   if (records.length === 0) return;
 
-  const moodColor = { "スッキリ": "#225AD3", "ふつう": "#7db8ef", "どんより": "#b8bfc9" };
+  const moodColor = { "スッキリ": "#5B5BD6", "ふつう": "#A9A9E8", "どんより": "#c3c3cd" };
   const slotW = (W - padL - 10) / 7;
 
   records.forEach((r, i) => {
@@ -456,8 +641,7 @@ function drawGraph() {
     const y = padT + graphH - barH;
     const bw = slotW * 0.6;
 
-    // 棒（角丸風）
-    ctx.fillStyle = moodColor[r.mood] || "#7db8ef";
+    ctx.fillStyle = moodColor[r.mood] || "#A9A9E8";
     ctx.beginPath();
     ctx.moveTo(x, y + 6);
     ctx.arcTo(x, y, x + bw, y, 6);
@@ -467,19 +651,16 @@ function drawGraph() {
     ctx.closePath();
     ctx.fill();
 
-    // 時間ラベル
-    ctx.fillStyle = "#225AD3";
+    ctx.fillStyle = "#5B5BD6";
     ctx.font = "bold 11px sans-serif";
     ctx.textAlign = "center";
     ctx.fillText(r.hours + "h", x + bw/2, y - 6);
 
-    // 日付ラベル
     ctx.fillStyle = "#888";
     ctx.font = "10px sans-serif";
     ctx.fillText(r.date.slice(5).replace("-","/"), x + bw/2, H - 12);
   });
 
-  // ベスト睡眠日
   const best = records.filter(r => r.mood === "スッキリ").sort((a,b) => b.hours - a.hours)[0];
   const box = document.getElementById("bestBox");
   if (best) {
@@ -554,7 +735,6 @@ function toast(msg) {
 // ========== 起動 ==========
 if (getProfile()) {
   showScreen("screen-record");
-  renderHistory();
 } else {
   showScreen("screen-onboard");
 }
