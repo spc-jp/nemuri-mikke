@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ねむりみっけ 〜いい眠り、みっけ！〜</title>
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="apple-touch-icon" href="favicon.png">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
@@ -288,105 +290,111 @@
 </head>
 <body>
 <div class="app">
+
   <div class="header">
     <h1>🌙 ねむりみっけ</h1>
     <span class="sub">いい眠り、みっけ！</span>
   </div>
+
   <!-- ===== 画面1 オンボーディング ===== -->
   <div class="screen" id="screen-onboard">
     <div class="card">
       <h2>はじめまして😊</h2>
       <p style="font-size:14px; line-height:1.8; color:#444;">あなたに合ったアドバイスをお届けするため、4つだけ教えてください。</p>
-  <div class="label">性別</div>
-  <div class="choice-row" data-group="gender">
-    <div class="choice-btn" data-val="男性">男性</div>
-    <div class="choice-btn" data-val="女性">女性</div>
-    <div class="choice-btn" data-val="その他">その他</div>
+
+      <div class="label">性別</div>
+      <div class="choice-row" data-group="gender">
+        <div class="choice-btn" data-val="男性">男性</div>
+        <div class="choice-btn" data-val="女性">女性</div>
+        <div class="choice-btn" data-val="その他">その他</div>
+      </div>
+
+      <div class="label">年代</div>
+      <div class="choice-row" data-group="age">
+        <div class="choice-btn" data-val="40代以下">40代以下</div>
+        <div class="choice-btn" data-val="50代">50代</div>
+        <div class="choice-btn" data-val="60代">60代</div>
+        <div class="choice-btn" data-val="70代以上">70代以上</div>
+      </div>
+
+      <div class="label">あなたのタイプ</div>
+      <div class="choice-row" data-group="chrono">
+        <div class="choice-btn" data-val="朝型"><span class="big-emoji">🌅</span>朝型</div>
+        <div class="choice-btn" data-val="夜型"><span class="big-emoji">🌃</span>夜型</div>
+      </div>
+
+      <div class="label">いちばんの悩み</div>
+      <div class="choice-row" data-group="worry">
+        <div class="choice-btn" data-val="寝つき">寝つきが悪い</div>
+        <div class="choice-btn" data-val="中途覚醒">夜中に目が覚める</div>
+        <div class="choice-btn" data-val="朝">朝スッキリしない</div>
+      </div>
+
+      <button class="main-btn" onclick="saveProfile()">はじめる 🌙</button>
+    </div>
   </div>
 
-  <div class="label">年代</div>
-  <div class="choice-row" data-group="age">
-    <div class="choice-btn" data-val="40代以下">40代以下</div>
-    <div class="choice-btn" data-val="50代">50代</div>
-    <div class="choice-btn" data-val="60代">60代</div>
-    <div class="choice-btn" data-val="70代以上">70代以上</div>
-  </div>
-
-  <div class="label">あなたのタイプ</div>
-  <div class="choice-row" data-group="chrono">
-    <div class="choice-btn" data-val="朝型"><span class="big-emoji">🌅</span>朝型</div>
-    <div class="choice-btn" data-val="夜型"><span class="big-emoji">🌃</span>夜型</div>
-  </div>
-
-  <div class="label">いちばんの悩み</div>
-  <div class="choice-row" data-group="worry">
-    <div class="choice-btn" data-val="寝つき">寝つきが悪い</div>
-    <div class="choice-btn" data-val="中途覚醒">夜中に目が覚める</div>
-    <div class="choice-btn" data-val="朝">朝スッキリしない</div>
-  </div>
-
-  <button class="main-btn" onclick="saveProfile()">はじめる 🌙</button>
-</div>
-  </div>
   <!-- ===== 画面2 今日の記録（ホーム） ===== -->
   <div class="screen" id="screen-record">
-<div class="card todo-card">
-  <div class="todo-head">
-    <span class="title">✅ 今日のやること</span>
-    <span class="count" id="todoCount">0/1</span>
+
+    <div class="card todo-card">
+      <div class="todo-head">
+        <span class="title">✅ 今日のやること</span>
+        <span class="count" id="todoCount">0/1</span>
+      </div>
+      <div class="todo-item" id="todoRecord">
+        <div class="todo-circle" id="todoCircle"></div>
+        <span class="txt">🌙 今日の眠りを記録する</span>
+      </div>
+    </div>
+
+    <div class="plan-card">
+      <span class="plan-change" onclick="resetProfile()">変更する</span>
+      <span class="plan-badge" id="planBadge">プラン</span>
+      <div class="plan-title" id="planTitle">「あなたのプラン」</div>
+      <div class="plan-desc" id="planDesc"></div>
+    </div>
+
+    <div class="hitokoto">
+      <span class="h-label">💬 今日の一言</span>
+      <span id="hitokotoText"></span>
+    </div>
+
+    <div class="card">
+      <h2>今日の眠りを記録📝</h2>
+
+      <div class="label">寝た時間</div>
+      <input type="time" id="sleepTime" value="23:00">
+
+      <div class="label">起きた時間</div>
+      <input type="time" id="wakeTime" value="06:00">
+
+      <div class="label">寝つきはどうでしたか？</div>
+      <div class="choice-row" data-group="fallAsleep">
+        <div class="choice-btn" data-val="すぐ寝れた">すぐ寝れた</div>
+        <div class="choice-btn" data-val="まあまあ">まあまあ</div>
+        <div class="choice-btn" data-val="なかなか">なかなか</div>
+      </div>
+
+      <div class="label">目覚めの気分は？</div>
+      <div class="choice-row" data-group="mood">
+        <div class="choice-btn" data-val="スッキリ"><span class="big-emoji">😊</span>スッキリ</div>
+        <div class="choice-btn" data-val="ふつう"><span class="big-emoji">😐</span>ふつう</div>
+        <div class="choice-btn" data-val="どんより"><span class="big-emoji">😪</span>どんより</div>
+      </div>
+
+      <div class="label">メモ（お酒・昼寝・運動など、あれば）</div>
+      <textarea id="memo" placeholder="例：夕食後にお酒を少し。夕方30分散歩。"></textarea>
+
+      <button class="main-btn" onclick="saveRecord()">記録する ✨</button>
+    </div>
+
+    <div class="card">
+      <h2>さいきんの記録</h2>
+      <div id="historyList"></div>
+    </div>
   </div>
-  <div class="todo-item" id="todoRecord">
-    <div class="todo-circle" id="todoCircle"></div>
-    <span class="txt">🌙 今日の眠りを記録する</span>
-  </div>
-</div>
 
-<div class="plan-card">
-  <span class="plan-change" onclick="resetProfile()">変更する</span>
-  <span class="plan-badge" id="planBadge">プラン</span>
-  <div class="plan-title" id="planTitle">「あなたのプラン」</div>
-  <div class="plan-desc" id="planDesc"></div>
-</div>
-
-<div class="hitokoto">
-  <span class="h-label">💬 今日の一言</span>
-  <span id="hitokotoText"></span>
-</div>
-
-<div class="card">
-  <h2>今日の眠りを記録📝</h2>
-
-  <div class="label">寝た時間</div>
-  <input type="time" id="sleepTime" value="23:00">
-
-  <div class="label">起きた時間</div>
-  <input type="time" id="wakeTime" value="06:00">
-
-  <div class="label">寝つきはどうでしたか？</div>
-  <div class="choice-row" data-group="fallAsleep">
-    <div class="choice-btn" data-val="すぐ寝れた">すぐ寝れた</div>
-    <div class="choice-btn" data-val="まあまあ">まあまあ</div>
-    <div class="choice-btn" data-val="なかなか">なかなか</div>
-  </div>
-
-  <div class="label">目覚めの気分は？</div>
-  <div class="choice-row" data-group="mood">
-    <div class="choice-btn" data-val="スッキリ"><span class="big-emoji">😊</span>スッキリ</div>
-    <div class="choice-btn" data-val="ふつう"><span class="big-emoji">😐</span>ふつう</div>
-    <div class="choice-btn" data-val="どんより"><span class="big-emoji">😪</span>どんより</div>
-  </div>
-
-  <div class="label">メモ（お酒・昼寝・運動など、あれば）</div>
-  <textarea id="memo" placeholder="例：夕食後にお酒を少し。夕方30分散歩。"></textarea>
-
-  <button class="main-btn" onclick="saveRecord()">記録する ✨</button>
-</div>
-
-<div class="card">
-  <h2>さいきんの記録</h2>
-  <div id="historyList"></div>
-</div>
-  </div>
   <!-- ===== 画面3 ねむりグラフ ===== -->
   <div class="screen" id="screen-graph">
     <div class="card">
@@ -398,6 +406,7 @@
       <div class="best-box" id="bestBox">まだ記録がありません。まずは今日の眠りを記録してみましょう😊</div>
     </div>
   </div>
+
   <!-- ===== 画面4 アドバイス ===== -->
   <div class="screen" id="screen-advice">
     <div class="card">
@@ -410,6 +419,7 @@
       </div>
     </div>
   </div>
+
   <!-- ===== 画面5 設定 ===== -->
   <div class="screen" id="screen-setting">
     <div class="card">
@@ -417,17 +427,20 @@
       <div class="label">Pro版パスワード（お持ちの方）</div>
       <input type="password" id="proPass" placeholder="パスワードを入力">
       <button class="sub-btn" onclick="checkPass()">Pro版を解除する</button>
-  <div class="label" style="margin-top:20px;">データ管理</div>
-  <button class="sub-btn" onclick="resetProfile()">プロフィールを設定しなおす</button>
-  <button class="sub-btn" onclick="deleteAll()" style="color:#c0392b; border-color:#f2c9c4; background:#fdf1ef;">すべてのデータを削除する</button>
 
-  <p style="font-size:12px; color:#888; margin-top:16px; line-height:1.7;">
-    記録はこの端末の中だけに保存されます。サーバーには送信されません。<br>
-    ねむりみっけ ver 1.2 ／ みっけシリーズ
-  </p>
-</div>
+      <div class="label" style="margin-top:20px;">データ管理</div>
+      <button class="sub-btn" onclick="resetProfile()">プロフィールを設定しなおす</button>
+      <button class="sub-btn" onclick="deleteAll()" style="color:#c0392b; border-color:#f2c9c4; background:#fdf1ef;">すべてのデータを削除する</button>
+
+      <p style="font-size:12px; color:#888; margin-top:16px; line-height:1.7;">
+        記録はこの端末の中だけに保存されます。サーバーには送信されません。<br>
+        ねむりみっけ ver 1.2 ／ みっけシリーズ
+      </p>
+    </div>
   </div>
+
 </div>
+
 <!-- タブバー -->
 <div class="tabbar">
   <div class="tab" data-screen="screen-record"><span class="t-icon">🏠</span>ホーム</div>
@@ -435,20 +448,36 @@
   <div class="tab" data-screen="screen-advice"><span class="t-icon">💡</span>アドバイス</div>
   <div class="tab" data-screen="screen-setting"><span class="t-icon">⚙️</span>設定</div>
 </div>
+
 <div class="toast" id="toast"></div>
+
 <script>
 // ========== データ管理 ==========
+// アーティファクトのプレビューではlocalStorageが使えないため、
+// メモリ保存に自動フォールバックする仕組みを入れています。
+// GitHub Pagesなど本番環境では従来どおりlocalStorageに保存されます。
 const KEY_PROFILE = "nemuri_profile";
 const KEY_RECORDS = "nemuri_records";
 const KEY_PRO = "nemuri_pro";
 
+const memStore = {};
+function storeGet(key) {
+  try { return localStorage.getItem(key); } catch(e) { return memStore[key] || null; }
+}
+function storeSet(key, val) {
+  try { localStorage.setItem(key, val); } catch(e) { memStore[key] = val; }
+}
+function storeRemove(key) {
+  try { localStorage.removeItem(key); } catch(e) { delete memStore[key]; }
+}
+
 function getProfile() {
-  try { return JSON.parse(localStorage.getItem(KEY_PROFILE)); } catch(e) { return null; }
+  try { return JSON.parse(storeGet(KEY_PROFILE)); } catch(e) { return null; }
 }
 function getRecords() {
-  try { return JSON.parse(localStorage.getItem(KEY_RECORDS)) || []; } catch(e) { return []; }
+  try { return JSON.parse(storeGet(KEY_RECORDS)) || []; } catch(e) { return []; }
 }
-function setRecords(r) { localStorage.setItem(KEY_RECORDS, JSON.stringify(r)); }
+function setRecords(r) { storeSet(KEY_RECORDS, JSON.stringify(r)); }
 
 // ========== 選択ボタン共通 ==========
 document.querySelectorAll(".choice-row").forEach(row => {
@@ -564,7 +593,7 @@ function saveProfile() {
     toast("すべての項目を選んでくださいね");
     return;
   }
-  localStorage.setItem(KEY_PROFILE, JSON.stringify(p));
+  storeSet(KEY_PROFILE, JSON.stringify(p));
   toast("ようこそ、ねむりみっけへ🌙");
   showScreen("screen-record");
 }
@@ -728,13 +757,13 @@ function checkPass() {
 
 // ========== 設定 ==========
 function resetProfile() {
-  localStorage.removeItem(KEY_PROFILE);
+  storeRemove(KEY_PROFILE);
   location.reload();
 }
 function deleteAll() {
   if (confirm("すべての記録を削除します。よろしいですか？")) {
-    localStorage.removeItem(KEY_RECORDS);
-    localStorage.removeItem(KEY_PROFILE);
+    storeRemove(KEY_RECORDS);
+    storeRemove(KEY_PROFILE);
     location.reload();
   }
 }
